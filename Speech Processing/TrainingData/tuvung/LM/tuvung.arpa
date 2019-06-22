@@ -1,0 +1,348 @@
+#############################################################################
+## Copyright (c) 1996, Carnegie Mellon University, Cambridge University,
+## Ronald Rosenfeld and Philip Clarkson
+## Version 3, Copyright (c) 2006, Carnegie Mellon University 
+## Contributors includes Wen Xu, Ananlada Chotimongkol, 
+## David Huggins-Daines, Arthur Chan and Alan Black 
+#############################################################################
+=============================================================================
+===============  This file was produced by the CMU-Cambridge  ===============
+===============     Statistical Language Modeling Toolkit     ===============
+=============================================================================
+This is a 3-gram language model, based on a vocabulary of 27 words,
+  which begins "</s>", "<s>", "ba"...
+This is a CLOSED-vocabulary model
+  (OOVs eliminated from training data and are forbidden in test data)
+Good-Turing discounting was applied.
+1-gram frequency of frequency : 8 
+2-gram frequency of frequency : 81 2 1 0 9 0 0 
+3-gram frequency of frequency : 145 1 1 0 9 0 0 
+1-gram discounting ratios : 0.89 
+2-gram discounting ratios : 0.01 0.74 
+3-gram discounting ratios : 0.00 
+This file is in the ARPA-standard format introduced by Doug Paul.
+
+p(wd3|wd1,wd2)= if(trigram exists)           p_3(wd1,wd2,wd3)
+                else if(bigram w1,w2 exists) bo_wt_2(w1,w2)*p(wd3|wd2)
+                else                         p(wd3|w2)
+
+p(wd2|wd1)= if(bigram exists) p_2(wd1,wd2)
+            else              bo_wt_1(wd1)*p_1(wd2)
+
+All probs and back-off weights (bo_wt) are given in log10 form.
+
+Data formats:
+
+Beginning of data mark: \data\
+ngram 1=nr            # number of 1-grams
+ngram 2=nr            # number of 2-grams
+ngram 3=nr            # number of 3-grams
+
+\1-grams:
+p_1     wd_1 bo_wt_1
+\2-grams:
+p_2     wd_1 wd_2 bo_wt_2
+\3-grams:
+p_3     wd_1 wd_2 wd_3 
+
+end of data mark: \end\
+
+\data\
+ngram 1=27
+ngram 2=99
+ngram 3=161
+
+\1-grams:
+-0.6454 </s>	-1.6879
+-0.6454 <s>	-0.1843
+-1.6596 ba	-0.7268
+-1.6596 bary	-0.7268
+-1.6596 boosn	-0.7268
+-1.4378 chia	0.3494
+-2.4889 chim	0.0000
+-1.6596 chisn	-0.7289
+-2.4889 chos	0.1058
+-2.4889 chuoojt	0.1058
+-2.4889 coojng	0.1058
+-1.4378 coong	0.0917
+-2.4889 gaf	0.1058
+-1.6596 hai	-0.7268
+-2.4889 heo	0.1058
+-2.1367 khoong	0.2043
+-2.4889 lawm	0.1058
+-2.4889 mefo	0.1058
+-0.8043 moojt	-1.4261
+-2.1367 mootj	-0.4906
+-1.7388 muwowfi	-0.7337
+-2.4889 muwowi	0.1058
+-1.6596 nawm	-0.7268
+-1.3964 nhaan	0.3677
+-1.6596 sasu	-0.7268
+-1.6596 tasm	-0.7268
+-1.3964 truwf	0.2362
+
+\2-grams:
+-0.0069 </s> <s> 0.0386
+-3.6845 <s> ba 0.8451
+-3.6845 <s> bary 0.8451
+-3.6845 <s> boosn 0.8451
+-3.6845 <s> chia 0.0006
+-3.6845 <s> chisn 0.8451
+-3.6845 <s> chos 0.0056
+-3.6845 <s> chuoojt 0.0056
+-3.6845 <s> coojng 0.0056
+-3.6845 <s> gaf 0.0056
+-3.6845 <s> hai 0.8451
+-3.6845 <s> heo 0.0056
+-1.6219 <s> khoong 0.0056
+-3.6845 <s> lawm 0.0056
+-3.6845 <s> mefo 0.0056
+-0.1903 <s> moojt 0.0414
+-3.6845 <s> muwowfi 0.8451
+-3.6845 <s> muwowi 0.0056
+-3.6845 <s> nawm 0.8451
+-3.6845 <s> nhaan 0.0005
+-3.6845 <s> sasu 0.8451
+-3.6845 <s> tasm 0.8451
+-3.6845 <s> truwf 0.0005
+-0.0669 ba </s> 1.0212
+-2.7372 ba boosn 0.0008
+-0.0669 bary </s> 1.0212
+-2.7372 bary tasm 0.0008
+-0.0669 boosn </s> 1.0212
+-2.7372 boosn nawm 0.0008
+-2.8921 chia </s> 1.7993
+-2.8921 chia ba 0.8451
+-2.8921 chia bary 0.8451
+-2.8921 chia boosn 0.8451
+-2.8921 chia chisn 0.8451
+-2.8921 chia hai 0.8451
+-2.8921 chia moojt 0.0414
+-2.8921 chia nawm 0.8451
+-2.8921 chia sasu 0.8451
+-2.8921 chia tasm 0.8451
+-0.0669 chisn </s> 1.0212
+-2.7372 chisn muwowfi 0.8451
+-1.8921 chos </s> 1.7993
+-1.8921 chuoojt </s> 1.7993
+-1.8921 coojng </s> 1.7993
+-2.8921 coong ba 0.8451
+-2.8921 coong bary 0.8451
+-2.8921 coong boosn 0.8451
+-2.8921 coong chisn 0.8451
+-2.8921 coong hai 0.8451
+-2.8921 coong mootj 0.6021
+-2.8921 coong muwowfi 0.8451
+-2.8921 coong nawm 0.8451
+-2.8921 coong sasu 0.8451
+-2.8921 coong tasm 0.8451
+-1.8921 gaf </s> 1.7993
+-0.0669 hai </s> 1.0212
+-2.7372 hai ba 0.0008
+-1.8921 heo </s> 1.7993
+-2.1931 khoong </s> 1.7993
+-2.1931 khoong moojt 0.0001
+-1.8921 lawm </s> 1.7993
+-1.8921 mefo </s> 1.7993
+-1.0414 moojt </s> 1.1973
+-0.6892 moojt chia 0.0050
+-0.6435 moojt coong 0.0056
+-3.5355 moojt hai 0.0008
+-0.6435 moojt nhaan 0.0051
+-0.6435 moojt truwf 0.0051
+-0.1249 mootj </s> 1.3222
+-0.0669 muwowfi </s> 1.0212
+-1.8921 muwowi </s> 1.7993
+-0.0669 nawm </s> 1.0212
+-2.7372 nawm sasu 0.0008
+-2.9335 nhaan </s> 1.7993
+-2.9335 nhaan ba 0.8451
+-2.9335 nhaan bary 0.8451
+-2.9335 nhaan boosn 0.8451
+-2.9335 nhaan chisn 0.8451
+-2.9335 nhaan hai 0.8451
+-2.9335 nhaan moojt 0.0414
+-2.9335 nhaan muwowfi 0.8451
+-2.9335 nhaan nawm 0.8451
+-2.9335 nhaan sasu 0.8451
+-2.9335 nhaan tasm 0.8451
+-0.0669 sasu </s> 1.0212
+-2.7372 sasu bary 0.0008
+-0.0669 tasm </s> 1.0212
+-2.7372 tasm chisn 0.0008
+-2.9335 truwf </s> 1.7993
+-2.9335 truwf ba 0.8451
+-2.9335 truwf bary 0.8451
+-2.9335 truwf boosn 0.8451
+-2.9335 truwf chisn 0.8451
+-2.9335 truwf hai 0.8451
+-2.9335 truwf mootj 0.6021
+-2.9335 truwf muwowfi 0.8451
+-2.9335 truwf nawm 0.8451
+-2.9335 truwf sasu 0.8451
+-2.9335 truwf tasm 0.8451
+
+\3-grams:
+-99.9990 </s> <s> ba 
+-99.9990 </s> <s> bary 
+-99.9990 </s> <s> boosn 
+-99.9990 </s> <s> chia 
+-99.9990 </s> <s> chim 
+-99.9990 </s> <s> chisn 
+-99.9990 </s> <s> chos 
+-99.9990 </s> <s> chuoojt 
+-99.9990 </s> <s> coojng 
+-99.9990 </s> <s> gaf 
+-99.9990 </s> <s> hai 
+-99.9990 </s> <s> heo 
+-99.9990 </s> <s> khoong 
+-99.9990 </s> <s> lawm 
+-99.9990 </s> <s> mefo 
+-0.1903 </s> <s> moojt 
+-99.9990 </s> <s> muwowfi 
+-99.9990 </s> <s> muwowi 
+-99.9990 </s> <s> nawm 
+-99.9990 </s> <s> nhaan 
+-99.9990 </s> <s> sasu 
+-99.9990 </s> <s> tasm 
+-99.9990 </s> <s> truwf 
+-99.9990 <s> ba </s> 
+-99.9990 <s> bary </s> 
+-99.9990 <s> boosn </s> 
+-99.9990 <s> chia </s> 
+-99.9990 <s> chisn </s> 
+-99.9990 <s> chos </s> 
+-99.9990 <s> chuoojt </s> 
+-99.9990 <s> coojng </s> 
+-99.9990 <s> gaf </s> 
+-99.9990 <s> hai </s> 
+-99.9990 <s> heo </s> 
+-99.9990 <s> khoong </s> 
+-99.9990 <s> khoong moojt 
+-99.9990 <s> lawm </s> 
+-99.9990 <s> mefo </s> 
+-99.9990 <s> moojt </s> 
+-0.6478 <s> moojt chia 
+-0.6021 <s> moojt coong 
+-0.6021 <s> moojt nhaan 
+-0.6021 <s> moojt truwf 
+-99.9990 <s> muwowfi </s> 
+-99.9990 <s> muwowi </s> 
+-99.9990 <s> nawm </s> 
+-99.9990 <s> nhaan </s> 
+-99.9990 <s> sasu </s> 
+-99.9990 <s> tasm </s> 
+-99.9990 <s> truwf </s> 
+-0.0792 ba </s> <s> 
+-99.9990 ba boosn nawm 
+-0.0792 bary </s> <s> 
+-99.9990 bary tasm chisn 
+-0.0792 boosn </s> <s> 
+-99.9990 boosn nawm sasu 
+-99.9990 chia </s> <s> 
+-99.9990 chia ba </s> 
+-99.9990 chia bary </s> 
+-99.9990 chia boosn </s> 
+-99.9990 chia chisn </s> 
+-99.9990 chia hai </s> 
+-99.9990 chia moojt </s> 
+-99.9990 chia nawm </s> 
+-99.9990 chia sasu </s> 
+-99.9990 chia tasm </s> 
+-0.0792 chisn </s> <s> 
+-99.9990 chisn muwowfi </s> 
+-99.9990 chos </s> <s> 
+-99.9990 chuoojt </s> <s> 
+-99.9990 coojng </s> <s> 
+-99.9990 coong ba </s> 
+-99.9990 coong bary </s> 
+-99.9990 coong boosn </s> 
+-99.9990 coong chisn </s> 
+-99.9990 coong hai </s> 
+-99.9990 coong mootj </s> 
+-99.9990 coong muwowfi </s> 
+-99.9990 coong nawm </s> 
+-99.9990 coong sasu </s> 
+-99.9990 coong tasm </s> 
+-99.9990 gaf </s> <s> 
+-0.0792 hai </s> <s> 
+-99.9990 hai ba boosn 
+-99.9990 heo </s> <s> 
+-99.9990 khoong </s> <s> 
+-99.9990 khoong moojt hai 
+-99.9990 lawm </s> <s> 
+-99.9990 mefo </s> <s> 
+-0.1249 moojt </s> <s> 
+-99.9990 moojt chia ba 
+-99.9990 moojt chia bary 
+-99.9990 moojt chia boosn 
+-99.9990 moojt chia chisn 
+-99.9990 moojt chia hai 
+-99.9990 moojt chia moojt 
+-99.9990 moojt chia nawm 
+-99.9990 moojt chia sasu 
+-99.9990 moojt chia tasm 
+-99.9990 moojt coong ba 
+-99.9990 moojt coong bary 
+-99.9990 moojt coong boosn 
+-99.9990 moojt coong chisn 
+-99.9990 moojt coong hai 
+-99.9990 moojt coong mootj 
+-99.9990 moojt coong muwowfi 
+-99.9990 moojt coong nawm 
+-99.9990 moojt coong sasu 
+-99.9990 moojt coong tasm 
+-99.9990 moojt hai ba 
+-99.9990 moojt nhaan ba 
+-99.9990 moojt nhaan bary 
+-99.9990 moojt nhaan boosn 
+-99.9990 moojt nhaan chisn 
+-99.9990 moojt nhaan hai 
+-99.9990 moojt nhaan moojt 
+-99.9990 moojt nhaan muwowfi 
+-99.9990 moojt nhaan nawm 
+-99.9990 moojt nhaan sasu 
+-99.9990 moojt nhaan tasm 
+-99.9990 moojt truwf ba 
+-99.9990 moojt truwf bary 
+-99.9990 moojt truwf boosn 
+-99.9990 moojt truwf chisn 
+-99.9990 moojt truwf hai 
+-99.9990 moojt truwf mootj 
+-99.9990 moojt truwf muwowfi 
+-99.9990 moojt truwf nawm 
+-99.9990 moojt truwf sasu 
+-99.9990 moojt truwf tasm 
+-0.1761 mootj </s> <s> 
+-0.0792 muwowfi </s> <s> 
+-99.9990 muwowi </s> <s> 
+-0.0792 nawm </s> <s> 
+-99.9990 nawm sasu bary 
+-99.9990 nhaan </s> <s> 
+-99.9990 nhaan ba </s> 
+-99.9990 nhaan bary </s> 
+-99.9990 nhaan boosn </s> 
+-99.9990 nhaan chisn </s> 
+-99.9990 nhaan hai </s> 
+-99.9990 nhaan moojt </s> 
+-99.9990 nhaan muwowfi </s> 
+-99.9990 nhaan nawm </s> 
+-99.9990 nhaan sasu </s> 
+-99.9990 nhaan tasm </s> 
+-0.0792 sasu </s> <s> 
+-99.9990 sasu bary tasm 
+-0.0792 tasm </s> <s> 
+-99.9990 tasm chisn muwowfi 
+-99.9990 truwf </s> <s> 
+-99.9990 truwf ba </s> 
+-99.9990 truwf bary </s> 
+-99.9990 truwf boosn </s> 
+-99.9990 truwf chisn </s> 
+-99.9990 truwf hai </s> 
+-99.9990 truwf mootj </s> 
+-99.9990 truwf muwowfi </s> 
+-99.9990 truwf nawm </s> 
+-99.9990 truwf sasu </s> 
+-99.9990 truwf tasm </s> 
+
+\end\

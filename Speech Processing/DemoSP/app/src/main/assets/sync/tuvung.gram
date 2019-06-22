@@ -1,0 +1,9 @@
+#JSGF V1.0;
+
+grammar tuvung;
+
+<item> =   ( chim | chos | mefo | gaf | chuoojt | heo
+			 khoong | moojt | hai | ba | boosn | nawm | sasu | bary | tasm | chisn | muwowfi
+			 coojng | truwf | nhaan | chia ) ;
+
+public <tuvung> = <item>+;

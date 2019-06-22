@@ -1,0 +1,63 @@
+<s> khoong </s>
+<s> moojt </s>
+<s> hai </s>
+<s> ba </s>
+<s> boosn </s>
+<s> nawm </s>
+<s> sasu </s>
+<s> bary </s>
+<s> tasm </s>
+<s> chisn </s>
+<s> muwowi </s>
+<s> muwowfi </s>
+<s> khoong moojt hai ba boosn nawm sasu bary tasm chisn muwowfi </s>
+<s> moojt coong mootj </s>
+<s> moojt coong hai </s>
+<s> moojt coong ba </s>
+<s> moojt coong boosn </s>
+<s> moojt coong nawm </s>
+<s> moojt coong sasu </s>
+<s> moojt coong bary </s>
+<s> moojt coong tasm </s>
+<s> moojt coong chisn </s>
+<s> moojt coong muwowfi </s>
+<s> moojt truwf mootj </s>
+<s> moojt truwf hai </s>
+<s> moojt truwf ba </s>
+<s> moojt truwf boosn </s>
+<s> moojt truwf nawm </s>
+<s> moojt truwf sasu </s>
+<s> moojt truwf bary </s>
+<s> moojt truwf tasm </s>
+<s> moojt truwf chisn </s>
+<s> moojt truwf muwowfi </s>
+<s> moojt nhaan moojt </s>
+<s> moojt nhaan hai </s>
+<s> moojt nhaan ba </s>
+<s> moojt nhaan boosn </s>
+<s> moojt nhaan nawm </s>
+<s> moojt nhaan sasu </s>
+<s> moojt nhaan bary </s>
+<s> moojt nhaan tasm </s>
+<s> moojt nhaan chisn </s>
+<s> moojt nhaan muwowfi </s>
+<s> moojt chia moojt </s>
+<s> moojt chia hai </s>
+<s> moojt chia ba </s>
+<s> moojt chia boosn </s>
+<s> moojt chia nawm </s>
+<s> moojt chia sasu </s>
+<s> moojt chia bary </s>
+<s> moojt chia tasm </s>
+<s> moojt chia chisn </s>
+<s> lawm </s>
+<s> coojng </s>
+<s> truwf </s>
+<s> nhaan </s>
+<s> chia </s>
+<s> chos </s>
+<s> mefo </s>
+<s> gaf </s>
+<s> chuoojt </s>
+<s> heo </s>
+<s> chim </s>

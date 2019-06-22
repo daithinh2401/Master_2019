@@ -1,0 +1,23 @@
+các từ  có trong từ điển:
+không
+một
+hai
+ba
+bốn
+năm
+sáu
+bảy
+tám
+chín
+mười
+lăm
+cộng
+trừ
+nhân
+chia
+chim
+chó
+mèo
+gà
+chuột
+heo

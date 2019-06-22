@@ -1,0 +1,9 @@
+tuvung.dic
+tuvung.gram
+tuvung/feat.params
+tuvung/mdef
+tuvung/means
+tuvung/mixture_weights
+tuvung/noisedict
+tuvung/transition_matrices
+tuvung/variances
