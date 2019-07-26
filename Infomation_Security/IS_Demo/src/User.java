@@ -1,3 +1,5 @@
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class User {
@@ -65,7 +67,17 @@ public class User {
 	}
 	
 	public void changePassword(String id, String oldPw, String newPw) {
-		mSmartCard.changePassword(id, oldPw, newPw);
+		
+		Map<String, String> verifyMap = new HashMap<>();
+		
+		verifyMap.put("a", String.valueOf(this.a));
+		verifyMap.put("MID", MID);
+		verifyMap.put("MPW", MPW);
+		verifyMap.put("id", id);
+		verifyMap.put("oldPw", oldPw);
+		verifyMap.put("newPw", newPw);
+		
+		mSmartCard.changePassword(verifyMap);
 	}
 	
 	

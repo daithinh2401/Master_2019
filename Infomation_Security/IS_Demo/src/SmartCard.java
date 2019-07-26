@@ -23,13 +23,7 @@ public class SmartCard {
 		this.b = b;
 	}
 	
-	public void changePassword(String id, String oldPw, String newPw) {
-		
-		Map<String , String> verifyMap = new HashMap<>();
-		verifyMap.put("id", id);
-		verifyMap.put("oldPw", oldPw);
-		verifyMap.put("newPw", newPw);
-		
+	public void changePassword(Map<String , String> verifyMap) {
 		verifyMap = verifyOldPassword(verifyMap);
 		
 		if(verifyMap != null) {
@@ -67,8 +61,10 @@ public class SmartCard {
 		
 		// Save to map
 		verifyMap.put("a_star", a_star);
-		verifyMap.put("mid_star", mid_star);
 		verifyMap.put("x_star", x_star);
+		verifyMap.put("mid_star", mid_star);
+		verifyMap.put("mpw_star", mpw_star);
+		
 		
 		return verifyMap;
 	}
@@ -77,57 +73,57 @@ public class SmartCard {
 		
 		// Get from map
 		String a_star = verifyMap.get("a_star");
-		String id = verifyMap.get("id");
-		String mid = verifyMap.get("mid");
-		String newPw = verifyMap.get("newPw");
 		String x_star = verifyMap.get("x_star");
-		
+		String newPw = verifyMap.get("newPw");
+		String mid_star = verifyMap.get("mid_star");
+		String mpw_star = verifyMap.get("mpw_star");
+		String mid = verifyMap.get("MID");
+		String id = verifyMap.get("id");
 		
 		// MPW_new = h(a_star || PWnew)
 		String mpw_new = HashUtils.concatAndHashString(a_star, newPw);
-		
-		// y = xor(d , h(MPW || x_star))
-		String hashMPW_X = HashUtils.concatAndHashString(mpw_new, x_star);
-		String y_star = HashUtils.getStringFromXOR(this.d, hashMPW_X);
-		
+	
+		// y_star = xor(d , h(MPW || x_star))
+		String hash1 = HashUtils.concatAndHashString(mpw_star, x_star);
+		String y_star = HashUtils.getStringFromXOR(this.d, hash1);
+			
 		// PU_star = xor(e , h(MPW || y))
-		String hashMPW_Y = HashUtils.concatAndHashString(mpw_new, y_star);
-		String PU_star = HashUtils.getStringFromXOR(this.e, hashMPW_Y);
-		
+		String hash2 = HashUtils.concatAndHashString(mpw_star, y_star);
+		String PU_star = HashUtils.getStringFromXOR(this.e, hash2);
+
 		// z = xor(g , h(MPW || x || y))
-		String hashMPW_X_Y = HashUtils.concatAndHashString(mpw_new, x_star, y_star);
-		String z = HashUtils.getStringFromXOR(this.g, hashMPW_X_Y);
+		String hash3 = HashUtils.concatAndHashString(mpw_star, x_star, y_star);
+		String z = HashUtils.getStringFromXOR(this.g, hash3);
 		
 		
 		// x_new = h(MID || MPW_star)
 		String x_new = HashUtils.concatAndHashString(mid, mpw_new);
 		this.x = x_new;
-		
-		
+
 		// d_new = xor(y , h(MPW || x || y))
-		String hash_newpw_x = HashUtils.concatAndHashString(mpw_new, x_new);
-		String d_new = HashUtils.XOR(y_star, hash_newpw_x);
+		String hash4 = HashUtils.concatAndHashString(mpw_new, x_new);
+		String d_new = HashUtils.XOR(y_star, hash4);
 		this.d = d_new;
-		
-		
+
 		// e_new = xor(PU_star , h(mpw_new || y_star))
-		String hash_mpw_new_y = HashUtils.concatAndHashString(mpw_new, y_star);
-		String e_new = HashUtils.XOR(PU_star, hash_mpw_new_y);
+		String hash5 = HashUtils.concatAndHashString(mpw_new, y_star);
+		String e_new = HashUtils.XOR(PU_star, hash5);
 		this.e = e_new;
-		
-		
+
 		// g_new = xor(z , h(MPW || x || y))
-		String hash_newpw_x_y = HashUtils.concatAndHashString(mpw_new, x_star, y_star);
-		String g_new = HashUtils.XOR(z, hash_newpw_x_y);
-		this.g = g_new;
-		
+		String hash6 = HashUtils.concatAndHashString(mpw_new, x_star, y_star);
+		String g_new = HashUtils.XOR(z, hash6);
+		this.g = g_new;		
 		
 		// b_new = xor(z , h(MPW || x || y))
-		String hash_id_newpw = HashUtils.concatAndHashString(id, newPw);
-		String b_new = HashUtils.XOR(a_star, hash_id_newpw);
+		String hash7 = HashUtils.concatAndHashString(id, newPw);
+		String b_new = HashUtils.XOR(a_star, hash7);
 		this.b = b_new;
 		
+		System.out.println("doChangePassword(): Done !");
 	}
+	
+	
 	
 	public boolean authenticateStep1(String id, String pw) {
 		
