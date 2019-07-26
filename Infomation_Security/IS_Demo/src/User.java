@@ -62,8 +62,11 @@ public class User {
 		if(!step1Result) {
 			return;
 		}
-		
-		
 	}
+	
+	public void changePassword(String id, String oldPw, String newPw) {
+		mSmartCard.changePassword(id, oldPw, newPw);
+	}
+	
 	
 }
