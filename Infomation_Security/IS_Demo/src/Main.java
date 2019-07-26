@@ -15,7 +15,7 @@ public class Main {
 		
 		user.changePassword("abc", "123", "456");
 		
-		user.authenticate("abc", "123");
+		// re-authenticate with new password
 		user.authenticate("abc", "456");
 	}
 	

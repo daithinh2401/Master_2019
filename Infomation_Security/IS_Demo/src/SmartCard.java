@@ -1,11 +1,9 @@
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class SmartCard {
 
 	private String x;
-	private String c;
+	private String z;
 	private String d;
 	private String e;
 	private String g;
@@ -13,7 +11,7 @@ public class SmartCard {
 	
 	public SmartCard(String x, String c, String d, String e, String g) {
 		this.x = x;
-		this.c = c;
+		this.z = c;
 		this.d = d;
 		this.e = e;
 		this.g = g;
@@ -75,7 +73,6 @@ public class SmartCard {
 		String a_star = verifyMap.get("a_star");
 		String x_star = verifyMap.get("x_star");
 		String newPw = verifyMap.get("newPw");
-		String mid_star = verifyMap.get("mid_star");
 		String mpw_star = verifyMap.get("mpw_star");
 		String mid = verifyMap.get("MID");
 		String id = verifyMap.get("id");
