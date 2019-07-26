@@ -1,17 +1,17 @@
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 public class HashUtils {
 
-	public static String concatenate2Strings(String first, String second) {
+	public static String concat2Strings(String first, String second) {
 		return first + second;
 	}
 	
-	public static String concatenate3Strings(String first, String second, String third) {
+	public static String concat3Strings(String first, String second, String third) {
 		return first + second + third;
 	}
-	
 	
     public static String getSHA(String input) 
     { 
@@ -42,5 +42,74 @@ public class HashUtils {
             return null; 
         } 
     } 
+    
+	public static String concatAndHashString(String first, String second) {
+		String concat = first;
+		if(second != null) {
+			concat = HashUtils.concat2Strings(first, second);	
+		}
+		
+		String hash = HashUtils.getSHA(concat);
+		
+		return hash;
+	}
+	
+	public static String concatAndHashString(String first, String second, String third) {
+		String concat = first;
+		
+		if(third == null) {
+			return concatAndHashString(first, second);
+		}
+		
+		concat = concat3Strings(first, second, third);
+		String hash = HashUtils.getSHA(concat);
+		
+		return hash;
+	}
+	
+	public static String XOR(String str, String key) {
+		return encode(str, key);
+	}
+	
+	public static String getStringFromXOR(String str, String key) {
+		return decode(str, key);
+	}
+	
+	public static int xorNumber(int number1, int number2){ 
+		return number1 ^ number2;
+	}
+	
+    private static byte[] xorWithKey(byte[] a, byte[] key) {
+        byte[] out = new byte[a.length];
+        for (int i = 0; i < a.length; i++) {
+            out[i] = (byte) (a[i] ^ key[i%key.length]);
+        }
+        return out;
+    }
+    
+    
+	// xor 2 string
+    private static String encode(String s, String key) {
+        return base64Encode(xorWithKey(s.getBytes(), key.getBytes()));
+    }
+	
+    private static String base64Encode(byte[] bytes) {
+        String s = Base64.getEncoder().encodeToString(bytes);
+        return s.replaceAll("\\s", "");
+    }
+
+    
+    // get string from xor
+    private static String decode(String s, String key) {
+        return new String(xorWithKey(base64Decode(s), key.getBytes()));
+    }
+
+    private static byte[] base64Decode(String s) {
+        try {          
+            return Base64.getDecoder().decode(s);
+        } catch (Exception e) {
+        	return null;
+        }
+    }
 	
 }

@@ -9,22 +9,28 @@ public class User {
 	private int a;
 	private Random random = new Random();
 	
+	private SmartCard mSmartCard;
+	
 	public User(String id, String pw) {
 		this.ID = id;
 		this.PW = pw;
 		this.a = random.nextInt();
 	}
 	
+	public SmartCard getSmartCard() {
+		return mSmartCard;
+	}
+	
 	public void registerUser() {
 		
 		// Concatenate ID and PW with random number a
-		ID = HashUtils.concatenate2Strings(a + "", ID);
-		PW = HashUtils.concatenate2Strings(a + "", PW);
+		String concatId = HashUtils.concat2Strings(a + "", ID);
+		String concatPw = HashUtils.concat2Strings(a + "", PW);
 		
 		
 		// Hash ID and PW to MID and MPW
-		MID = HashUtils.getSHA(ID);
-		MPW = HashUtils.getSHA(PW);
+		MID = HashUtils.getSHA(concatId);
+		MPW = HashUtils.getSHA(concatPw);
 		
 		
 		// Send MID and MPW to IAS to handle
@@ -33,15 +39,16 @@ public class User {
 			@Override
 			public void onSmartCardGenerated(SmartCard sc) {
 				
-				String concateIDPW = HashUtils.concatenate2Strings(ID, PW);
-				String hashIDPW = HashUtils.getSHA(concateIDPW);
+				// Concat and hash id, pw
+				String hashIDPW = HashUtils.concatAndHashString(ID, PW);
 				
 				// b = a XOR hashIDPW
-				String b = hashIDPW;
+				String b = HashUtils.XOR(a + "", hashIDPW);
 				
 				sc.setB(b);
 				System.out.println("registerUser(): " + b);
-				
+			
+				mSmartCard = sc;
 			}
 		});
 	}

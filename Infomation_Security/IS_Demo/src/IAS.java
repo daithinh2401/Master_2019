@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class IAS {
 	
@@ -12,6 +14,8 @@ public class IAS {
 	private List<GateWay> listGW;
 	private static IAS mInstance = null;
 	
+	private Map<String, String> userInfoMap;
+	
 	public static IAS getInstance() {
 		if(mInstance == null) {
 			mInstance = new IAS();
@@ -22,6 +26,7 @@ public class IAS {
 	
 	public IAS() {
 		listGW = new ArrayList<>();
+		userInfoMap = new HashMap<String, String>();
 	}
 	
 	
@@ -31,29 +36,25 @@ public class IAS {
 		// Select secret Xu for user
 		Xu = "IAS-Xu";
 		
-		// Generate 5 gateways
+		// Generate numberGW gateways
 		for(int i = 1; i <= numberGW; i++) {
-			listGW.add(new GateWay("IAS-GWID" + i, "IAS-PGW" + i));
+			listGW.add(new GateWay("IAS-GWID" + "-" + i, "IAS-PGW" + "-" + i));
 		}
 		
 		// Select secret Xgw for user
 		Xgw = "IAS-Xgw";
 		
-		// Concatenate Xgw to GWID
-		for(GateWay gw: listGW) {
-			String gwid = gw.getGWID();
-			gwid = HashUtils.concatenate2Strings(gwid, Xgw);
-			gw.setGWID(gwid);
-		}
 		
-		
-		// Hash of GWID
 		String v = "";
 		String w = "";
 		
 		for(GateWay gw: listGW) {
-			v = HashUtils.getSHA(gw.getGWID());
-			w = HashUtils.getSHA(gw.getPGW());
+			
+			// Concatenate Xgw to GWID and hash
+			v = HashUtils.concatAndHashString(gw.getGWID(), Xgw);
+			
+			// Hash PGW
+			w = HashUtils.concatAndHashString(gw.getPGW(), null);
 			
 			// Add < GWID, PGW, v, w > to GW 's memory
 			gw.addToMessage(gw.getGWID());
@@ -63,48 +64,39 @@ public class IAS {
 		}	
 	}
 	
-	
 	public void handleUserRegister(String mid, String mpw, ISmartCardGenerateListener listener) {
 		// Select PU for user
-		String PU = "User-PU";
+		String PU = "User-PU" + "-" + mid;
 		
-		// Concatenate
-		String concateIdPw = HashUtils.concatenate2Strings(mid, mpw);
-		String concateIdXu = HashUtils.concatenate2Strings(mid, Xu);
-		
-
-		// Hash
-		String x = HashUtils.getSHA(concateIdPw);
-		String y = HashUtils.getSHA(concateIdXu);
+		// x = h(MID || MPW), y = h(MID || Xu)
+		String x = HashUtils.concatAndHashString(mid, mpw);
+		String y = HashUtils.concatAndHashString(mid, Xu);
 		
 		
-		// Concatenate x and MPW and hash
-		String concateX_MPW = HashUtils.concatenate2Strings(x, mpw);
-		String hash_concateX_MPW = HashUtils.getSHA(concateX_MPW);	
-		// d = XOR y and hash_concateX_MPW
-		String d = hash_concateX_MPW;
+		// d = y XOR hash_concateX_MPW
+		String hash_concateMPW_X = HashUtils.concatAndHashString(mpw, x);
+		String d = HashUtils.XOR(y, hash_concateMPW_X);
 		
 		
-		// Concatenate y and MPW and hash 
-		String concateY_MPW = HashUtils.concatenate2Strings(y, mpw);
-		String hash_concateY_MPW = HashUtils.getSHA(concateY_MPW);
-		// e = XOR PU and hash_concateY_MPW
-		String e = hash_concateY_MPW;
+		// e = PU XOR hash_concateY_MPW
+		String hash_concateMPW_Y = HashUtils.concatAndHashString(mpw , y);	
+		String e = HashUtils.XOR(PU, hash_concateMPW_Y);
 		
 		
-		// Concatenate PU and Xu
-		String concatePU_Xu = HashUtils.concatenate2Strings(PU, Xu);
-		String z = HashUtils.getSHA(concatePU_Xu);
+		// z = h(PU || Xu)
+		String z = HashUtils.concatAndHashString(PU, Xu);
 		
-		// Concatenate MPW, x, y
-		String concateMPW_X_Y = HashUtils.concatenate3Strings(mpw, x, y);
 		
-		// g = XOR z and concateMPW_X_Y
-		String g = concateMPW_X_Y;
+		// g = z XOR concateMPW_X_Y
+		String hash_concateMPW_X_Y = HashUtils.concatAndHashString(mpw, x, y);
+		String g = HashUtils.XOR(z, hash_concateMPW_X_Y);
 		
 		
 		SmartCard sc = new SmartCard(z, d, e, g);
 		listener.onSmartCardGenerated(sc);
 		
+		
+		// Save mid and pu of user to map
+		userInfoMap.put(mid, PU);
 	}
 }
