@@ -7,20 +7,25 @@ public class User {
 	private String MID;
 	private String MPW;
 	private int a;
-	private Random random = new Random();
-	
+
+	String PU;
+
 	private SmartCard mSmartCard;
 	
 	public User(String id, String pw) {
 		this.ID = id;
 		this.PW = pw;
-		this.a = random.nextInt();
+		this.a = HashUtils.randomIntegerUnsigned();
 	}
 	
 	public SmartCard getSmartCard() {
 		return mSmartCard;
 	}
-	
+
+	public String getMID() {
+		return MID;
+	}
+
 	public void registerUser() {
 		
 		// Concatenate ID and PW with random number a
@@ -34,7 +39,10 @@ public class User {
 		
 		
 		// Send MID and MPW to IAS to handle
-		IAS.getInstance().handleUserRegister(MID, MPW, new IAS.ISmartCardGenerateListener() {
+
+		PU = "User-PU" + "-" + MID;
+
+		IAS.getInstance().handleUserRegister(PU, MID, MPW, new IAS.ISmartCardGenerateListener() {
 			
 			@Override
 			public void onSmartCardGenerated(SmartCard sc) {
@@ -59,10 +67,11 @@ public class User {
 		
 		boolean step1Result = mSmartCard.authenticateStep1(id, pw);
 		
-		if(!step1Result) {
+		if(!step1Result || mSmartCard.getX_star() == null || mSmartCard.getX_star().equals("")) {
 			return;
 		}
-		
+
+		mSmartCard.authenticateStep2();
 		
 	}
 	
