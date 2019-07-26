@@ -43,14 +43,27 @@ public class User {
 				String hashIDPW = HashUtils.concatAndHashString(ID, PW);
 				
 				// b = a XOR hashIDPW
-				String b = HashUtils.XOR(a + "", hashIDPW);
+				String b = HashUtils.XOR(String.valueOf(a), hashIDPW);
 				
 				sc.setB(b);
-				System.out.println("registerUser(): " + b);
 			
 				mSmartCard = sc;
+				
+
+				System.out.println("registerUser(): Done !");
 			}
 		});
+	}
+	
+	public void authenticate(String id, String pw) {
+		
+		boolean step1Result = mSmartCard.authenticateStep1(id, pw);
+		
+		if(!step1Result) {
+			return;
+		}
+		
+		
 	}
 	
 }

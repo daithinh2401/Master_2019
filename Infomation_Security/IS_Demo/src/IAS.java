@@ -92,7 +92,7 @@ public class IAS {
 		String g = HashUtils.XOR(z, hash_concateMPW_X_Y);
 		
 		
-		SmartCard sc = new SmartCard(z, d, e, g);
+		SmartCard sc = new SmartCard(x, z, d, e, g);
 		listener.onSmartCardGenerated(sc);
 		
 		

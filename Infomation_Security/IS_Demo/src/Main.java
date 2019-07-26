@@ -10,6 +10,8 @@ public class Main {
 		
 		User user = new User("abc", "123");
 		user.registerUser();
+		
+		user.authenticate("abc", "123");
 	}
 	
 }
