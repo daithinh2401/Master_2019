@@ -157,7 +157,7 @@ public class SmartCard {
 		return result;
 	}
 	
-	public void authenticateStep2() {
+	public void authenticateStep2(User user) {
 		int k = random.nextInt();
 		int r = random.nextInt();
 		
@@ -210,10 +210,11 @@ public class SmartCard {
 		authenMap.put("M3", M3);
 		authenMap.put("M4", M4);
 		authenMap.put("t1_time", t1_time);
-		
+		authenMap.put("k", String.valueOf(k));
+		authenMap.put("r", String.valueOf(r));
 		System.out.println("authenticateStep2(): Done, send to GW verify");
 		
-		gw.authenticateStep3(authenMap);
+		gw.authenticateStep3(user, authenMap);
 		
 	}
 	

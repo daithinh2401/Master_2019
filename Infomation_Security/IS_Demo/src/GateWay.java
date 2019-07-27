@@ -37,7 +37,7 @@ public class GateWay {
 		message.add(str);
 	}
 	
-	public void authenticateStep3(Map<String, String> authenMap) {
+	public void authenticateStep3(User user, Map<String, String> authenMap) {
 		String t1_time = authenMap.get("t1_time");
 		String PU_star = authenMap.get("PU_star");
 		
@@ -92,7 +92,7 @@ public class GateWay {
 			
 			System.out.println("authenticateStep3(): Done, send to IAS authenticate step 4");
 			
-			IAS.getInstance().authenticateStep4(authenMap);
+			IAS.getInstance().authenticateStep4(user, authenMap);
 			
 		} else {
 			System.out.println("authenticateStep3(): Verify DELTA_TIME failed");
@@ -101,7 +101,7 @@ public class GateWay {
 		
 	}
 
-	public void authenticateStep5(Map<String, String> authenMap) {
+	public void authenticateStep5(User userWantAuthen, Map<String, String> authenMap) {
 		String t3_time = authenMap.get("t3_time");
 
 		Timestamp tc = new Timestamp(System.currentTimeMillis());
@@ -130,6 +130,18 @@ public class GateWay {
 			}else {
 				System.out.println("Verify m14 and m14_star success: " + authenMap.get("M14") + " " + m14_star);
 			}
+
+			Timestamp t4 = new Timestamp(System.currentTimeMillis());
+			String t4_time = String.valueOf(t4.getTime());
+			String sk_u_i_gw_j = HashUtils.concatAndHashString(nk_i_star, nk_j);
+			String m15 = HashUtils.concatAndHashString(pu, gwid, sk_u_i_gw_j, authenMap.get("t1_time"), authenMap.get("t2_time"),
+					authenMap.get("t3_time"), t4_time);
+
+			authenMap.put("t4_time", t4_time);
+			authenMap.put("M15", m15);
+			authenMap.put("gwid", gwid);
+
+			userWantAuthen.authenticateStep6(authenMap);
 
 		} else {
 			System.out.println("authenticateStep5(): Verify DELTA_TIME failed");

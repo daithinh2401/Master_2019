@@ -101,7 +101,7 @@ public class IAS {
 		userInfoMap.put(mid, PU);
 	}
 	
-	public void authenticateStep4(Map<String, String> authenMap) {
+	public void authenticateStep4(User user, Map<String, String> authenMap) {
 		String t2_time = authenMap.get("t2_time");
 		
 		Timestamp tc = new Timestamp(System.currentTimeMillis());
@@ -134,6 +134,8 @@ public class IAS {
 			String z_i_1_star = HashUtils.concatAndHashString(PU, Xu);
 			String mid_j_star = HashUtils.getStringFromXOR(authenMap.get("M1"),
 					HashUtils.concatAndHashString(z_i_1_star, authenMap.get("t1_time")));
+
+			authenMap.put("z_i_1_star", z_i_1_star);
 
 			if (mid_j_star.equals(mid)){
 				System.out.println("Verify mid_j_star and mid success: " + mid);
@@ -192,6 +194,7 @@ public class IAS {
 
 			// update pu_1_i to pu_2_i - pgw_j_1 to pgw_j2
 
+			authenMap.put("y_i_star", y_i_star);
 			authenMap.put("pu_i_1", PU);
 			authenMap.put("pu_i_2", pu_i_2);
 			authenMap.put("pgw_j_1", pgw);
@@ -207,7 +210,7 @@ public class IAS {
 			System.out.println("authenticateStep4(): Stage 4 - 5 - 6 - 7 - 8 success");
 
 			GateWay gw = IAS.getInstance().getListGW().get(0);
-			gw.authenticateStep5(authenMap);
+			gw.authenticateStep5(user, authenMap);
 		} else {
 			System.out.println("authenticateStep4(): Verify DELTA_TIME success");
 			return;
