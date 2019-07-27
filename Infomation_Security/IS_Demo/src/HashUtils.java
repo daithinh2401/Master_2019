@@ -4,6 +4,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class HashUtils {
+	
+	public static final long DELTA_TIME = 10000;
 
 	public static String concat2Strings(String first, String second) {
 		return first + second;
@@ -11,6 +13,11 @@ public class HashUtils {
 	
 	public static String concat3Strings(String first, String second, String third) {
 		return first + second + third;
+	}
+	
+	public static String concat7Strings(String first, String second, String third, 
+			String four, String five, String six, String seven) {
+		return first + second + third + four + five + six + seven;
 	}
 	
     public static String getSHA(String input) 
@@ -67,6 +74,15 @@ public class HashUtils {
 		return hash;
 	}
 	
+	public static String concatAndHashString(String first, String second, String third, 
+			String four, String five, String six, String seven) {
+		
+		String concat = concat7Strings(first, second, third, four, five, six, seven);
+		String hash = HashUtils.getSHA(concat);
+		
+		return hash;
+	}
+	
 	public static String XOR(String str, String key) {
 		return encode(str, key);
 	}
@@ -110,6 +126,12 @@ public class HashUtils {
         } catch (Exception e) {
         	return null;
         }
+    }
+    
+    
+    public static long getAbs(long t1, long t2) {
+    	if(t1 > t2) return t1 - t2;
+    	return t2 - t1;
     }
 	
 }

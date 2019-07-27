@@ -1,4 +1,7 @@
+import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class SmartCard {
 
@@ -8,6 +11,9 @@ public class SmartCard {
 	private String e;
 	private String g;
 	private String b;
+	private Random random = new Random();
+	
+	private Map<String, String> authenMap = new HashMap<>();
 	
 	public SmartCard(String x, String c, String d, String e, String g) {
 		this.x = x;
@@ -144,10 +150,70 @@ public class SmartCard {
 			System.out.println("authenticateStep1(): false - Failed, stop this process");
 		}
 		
+		authenMap.put("x_star", x_star);
+		authenMap.put("mid", mid);
+		authenMap.put("mpw", mpw);
+		
 		return result;
 	}
 	
 	public void authenticateStep2() {
+		int k = random.nextInt();
+		int r = random.nextInt();
+		
+		String x_star = authenMap.get("x_star");
+		String mid = authenMap.get("mid");
+		String mpw = authenMap.get("mpw");
+		
+		// y_star = xor( d, h(MPW, x_star)
+		String hash1 = HashUtils.concatAndHashString(mpw, x_star);
+		String y_star = HashUtils.getStringFromXOR(this.d, hash1);
+		
+		// PU_star = xor(e , h(MPW, y_star))
+		String hash2 = HashUtils.concatAndHashString(mpw, y_star);
+		String PU_star = HashUtils.getStringFromXOR(this.e, hash2);		
+		
+		
+		// z_star = xor(g , h(MPW, x_star, y_star))
+		String hash3 = HashUtils.concatAndHashString(mpw, x_star, y_star);
+		String z_star = HashUtils.getStringFromXOR(this.g, hash3);		
+		
+		// Current timestamp
+		Timestamp t1 = new Timestamp(System.currentTimeMillis());
+		String t1_time = String.valueOf(t1.getTime());
+		
+		// M1 = xor(h(z_star, T1), MID)
+		String hash4 = HashUtils.concatAndHashString(z_star, t1_time);
+		String M1 = HashUtils.XOR(hash4, mid);
+		
+		
+		// M2 = xor(K, h(y_star, T1))
+		String hash5 = HashUtils.concatAndHashString(y_star, t1_time);
+		String M2 = HashUtils.XOR(String.valueOf(k), hash5);		
+		
+		
+		// M3 = xor(r, h(y_star, z_star, T1))
+		String hash6 = HashUtils.concatAndHashString(y_star, z_star, t1_time);
+		String M3 = HashUtils.XOR(String.valueOf(r), hash6);
+		
+		
+		// M4 = h(M1, M2, M3, k, r, GWID, T1)
+		GateWay gw = IAS.getInstance().getListGW().get(0);
+		String gwid = gw.getGWID();
+		String M4 = HashUtils.concatAndHashString(M1, M2, M3, String.valueOf(k), 
+				String.valueOf(r), gwid, t1_time);
+		
+		
+		authenMap.put("PU_star", PU_star);
+		authenMap.put("M1", M1);
+		authenMap.put("M2", M2);
+		authenMap.put("M3", M3);
+		authenMap.put("M4", M4);
+		authenMap.put("t1_time", t1_time);
+		
+		System.out.println("authenticateStep2(): Done, send to GW verify");
+		
+		gw.authenticateStep3(authenMap);
 		
 	}
 	

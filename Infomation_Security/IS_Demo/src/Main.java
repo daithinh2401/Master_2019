@@ -13,10 +13,12 @@ public class Main {
 		
 		user.authenticate("abc", "123");
 		
-		user.changePassword("abc", "123", "456");
-		
-		// re-authenticate with new password
-		user.authenticate("abc", "456");
+//		user.changePassword("abc", "123", "456");
+//		
+//		// re-authenticate with new password
+//		user.authenticate("abc", "456");
+//		
+//		
 	}
 	
 }

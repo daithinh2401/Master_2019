@@ -61,8 +61,8 @@ public class User {
 		
 		boolean step1Result = mSmartCard.authenticateStep1(id, pw);
 		
-		if(!step1Result) {
-			return;
+		if(step1Result) {
+			mSmartCard.authenticateStep2();
 		}
 	}
 	

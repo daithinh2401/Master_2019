@@ -1,3 +1,4 @@
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +30,9 @@ public class IAS {
 		userInfoMap = new HashMap<String, String>();
 	}
 	
+	public List<GateWay> getListGW(){
+		return listGW;
+	}
 	
 	// System Setup Phase
 	public void systemSetupPhase(int numberGW) {
@@ -98,5 +102,40 @@ public class IAS {
 		
 		// Save mid and pu of user to map
 		userInfoMap.put(mid, PU);
+	}
+	
+	public void authenticateStep4(Map<String, String> authenMap) {
+		String t2_time = authenMap.get("t2_time");
+		
+		Timestamp tc = new Timestamp(System.currentTimeMillis());
+		if(HashUtils.getAbs(tc.getTime(), Long.parseLong(t2_time)) < HashUtils.DELTA_TIME) {
+			System.out.println("authenticateStep4(): Verify DELTA_TIME success");
+			
+			String gwid = listGW.get(0).getGWID();
+			
+			String pgw = authenMap.get("PGW");
+			String M5 = authenMap.get("M5");
+			
+			// w_star = h(PGW , Xgw)
+			String w_star = HashUtils.concatAndHashString(pgw, null);
+			
+			// GWID_star = xor (M5, h(w_star,t2))
+			String hash1 = HashUtils.concatAndHashString(w_star, t2_time);
+			String GWID_star = HashUtils.getStringFromXOR(M5 , hash1);
+			
+			GWID_star = GWID_star.substring(0, gwid.length());
+			
+			if(gwid.equals(GWID_star)) {
+				System.out.println("authenticateStep4(): Verify GWID and GWID_star success !");
+			} else {
+				System.out.println("authenticateStep4(): Verify GWID and GWID_star failed !");
+			}
+			
+		} else {
+			System.out.println("authenticateStep4(): Verify DELTA_TIME success");
+			return;
+		}
+		
+		
 	}
 }
