@@ -81,16 +81,19 @@ public class User {
 			String pu_i_1 = authenMap.get("pu_i_2");
 			String r_1_i = authenMap.get("r");
 			String z_i_1_star = authenMap.get("z_i_1_star");
+
 			String nk_j_star = HashUtils.getStringFromXOR(authenMap.get("M9"), HashUtils.concatAndHashString(gwid, y_i_star, authenMap.get("t3_time")));
 			String nk_i = HashUtils.concatAndHashString(k, MID);
 			String pu_i_2 = HashUtils.concatAndHashString(pu_i_1, r_1_i);
 			String z_i_2_star = HashUtils.getStringFromXOR(authenMap.get("M10"), HashUtils.concatAndHashString(y_i_star,z_i_1_star , authenMap.get("t3_time")));
+
 			String m11_star = HashUtils.concatAndHashString(authenMap.get("M9"), authenMap.get("M10"), nk_i, nk_j_star, pu_i_2,
 					authenMap.get("t1_time"), authenMap.get("t2_time"), authenMap.get("t3_time"), y_i_star);
 			if (m11_star.equals(authenMap.get("M11"))){
 				System.out.println("Verify m11 and m11_star success: " + authenMap.get("M11"));
 			}else {
-				System.out.println("Verify m11 and m11_star success: " + authenMap.get("M11") + " " + m11_star);
+				System.out.println("Verify m11 and m11_star fail: " + authenMap.get("M11") + " " + m11_star);
+				return;
 			}
 
 			String sk_u_i_gw_j = HashUtils.concatAndHashString(HashUtils.getStringFromXOR(nk_i, nk_j_star),null);
@@ -99,8 +102,12 @@ public class User {
 			if (m15_star.equals(authenMap.get("M15"))){
 				System.out.println("Verify m15 and m15_star success: " + authenMap.get("M15"));
 			}else {
-				System.out.println("Verify m15 and m15_star success: " + authenMap.get("M15") + " " + m15_star);
+				System.out.println("Verify m15 and m15_star fail: " + authenMap.get("M15") + " " + m15_star);
+				return;
 			}
+
+			System.out.println("User login and authenticity.");
+			System.out.println("User and gateway 0 can communicate securely using the derived session key: " + sk_u_i_gw_j);
 
 		} else {
 			System.out.println("authenticateStep6(): Verify DELTA_TIME failed");

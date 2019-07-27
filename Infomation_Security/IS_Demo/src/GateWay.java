@@ -113,8 +113,8 @@ public class GateWay {
 			String w = message.get(3);
 			String k = authenMap.get("k");
 			String s = authenMap.get("s");
-			String pu = authenMap.get("pu_i_2");
-			String pgw = authenMap.get("pgw_j_2");
+			String pu = authenMap.get("pu_i_1");
+			String pgw = authenMap.get("pgw_j_1");
 
 			String nk_i_star = HashUtils.getStringFromXOR(authenMap.get("M12"),
 					HashUtils.concatAndHashString(pu, v, authenMap.get("t3_time")));
@@ -128,7 +128,7 @@ public class GateWay {
 			if (m14_star.equals(authenMap.get("M14"))){
 				System.out.println("Verify m14 and m14_star success: " + authenMap.get("M14"));
 			}else {
-				System.out.println("Verify m14 and m14_star success: " + authenMap.get("M14") + " " + m14_star);
+				System.out.println("Verify m14 and m14_star fail: " + authenMap.get("M14") + " " + m14_star);
 			}
 
 			Timestamp t4 = new Timestamp(System.currentTimeMillis());
