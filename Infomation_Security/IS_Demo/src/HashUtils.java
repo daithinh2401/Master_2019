@@ -19,6 +19,12 @@ public class HashUtils {
 			String four, String five, String six, String seven) {
 		return first + second + third + four + five + six + seven;
 	}
+
+    public static String concat9Strings(String first, String second, String third,
+                                        String four, String five, String six, String seven,
+                                        String eight, String nine) {
+        return first + second + third + four + five + six + seven + eight + nine;
+    }
 	
     public static String getSHA(String input) 
     { 
@@ -82,6 +88,16 @@ public class HashUtils {
 		
 		return hash;
 	}
+    public static String concatAndHashString(String first, String second, String third,
+                                             String four, String five, String six, String seven,
+                                             String eight, String nine) {
+
+        String concat = concat9Strings(first, second, third, four, five, six, seven, eight, nine);
+        String hash = HashUtils.getSHA(concat);
+
+        return hash;
+    }
+
 	
 	public static String XOR(String str, String key) {
 		return encode(str, key);

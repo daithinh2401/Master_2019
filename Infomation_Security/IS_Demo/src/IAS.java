@@ -1,8 +1,5 @@
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class IAS {
 	
@@ -130,7 +127,82 @@ public class IAS {
 			} else {
 				System.out.println("authenticateStep4(): Verify GWID and GWID_star failed !");
 			}
-			
+
+			// stage 5
+			String PU = userInfoMap.get(authenMap.get("mid"));
+			String mid = authenMap.get("mid");
+			String z_i_1_star = HashUtils.concatAndHashString(PU, Xu);
+			String mid_j_star = HashUtils.getStringFromXOR(authenMap.get("M1"),
+					HashUtils.concatAndHashString(z_i_1_star, authenMap.get("t1_time")));
+
+			if (mid_j_star.equals(mid)){
+				System.out.println("Verify mid_j_star and mid success: " + mid);
+			}else {
+				System.out.println("Verify mid_j_star and mid fail: " + mid + " " + mid_j_star);
+			}
+
+			// stage 6
+			String v_j_star = HashUtils.concatAndHashString(gwid, Xgw);
+			String k_j_star = HashUtils.getStringFromXOR(authenMap.get("M6"), HashUtils.concatAndHashString(v_j_star, t2_time));
+			String s_j_1_star = HashUtils.getStringFromXOR(authenMap.get("M7"),
+					HashUtils.concatAndHashString(v_j_star, w_star, t2_time));
+			String m8_star = HashUtils.concatAndHashString(authenMap.get("M5"), authenMap.get("M6"), authenMap.get("M7"),
+					k_j_star, s_j_1_star, PU, t2_time);
+
+			if (authenMap.get("M8").equals(m8_star)){
+				System.out.println("Verify m8 and m8_star success: " + authenMap.get("M8"));
+			}else {
+				System.out.println("Verify m8 and m8_star fail: " + authenMap.get("M8") + " " + m8_star);
+			}
+
+			String y_i_star = HashUtils.concatAndHashString(mid, Xu);
+			String k_i_star = HashUtils.getStringFromXOR(authenMap.get("M2"), HashUtils.concatAndHashString(y_i_star, authenMap.get("t1_time")));
+			String r_i_1_star = HashUtils.getStringFromXOR(authenMap.get("M3"), HashUtils.concatAndHashString(y_i_star, z_i_1_star, authenMap.get("t1_time")));
+			String m4_star = HashUtils.concatAndHashString(authenMap.get("M1"), authenMap.get("M2"), authenMap.get("M3"), k_i_star, r_i_1_star,
+					gwid, authenMap.get("t1_time"));
+
+			if (authenMap.get("M4").equals(m4_star)){
+				System.out.println("Verify m4 and m4_star success: " + authenMap.get("M4"));
+			}else {
+				System.out.println("Verify m4 and m4_star fail: " + authenMap.get("M4") + " " + m4_star);
+			}
+
+
+			//stage 7
+
+			String nk_i = HashUtils.concatAndHashString(k_i_star, mid);
+			String nk_j = HashUtils.concatAndHashString(k_j_star, gwid);
+			String pu_i_2 = HashUtils.concatAndHashString(PU, r_i_1_star);
+			String pgw_j_2 = HashUtils.concatAndHashString(pgw, s_j_1_star);
+			String z_i_2 = HashUtils.concatAndHashString(pu_i_2, Xu);
+			String w_j_2_star = HashUtils.concatAndHashString(pgw_j_2, Xgw);
+
+			// stage 8
+
+			Timestamp t3 = new Timestamp(System.currentTimeMillis());
+			String t3_time = String.valueOf(t3.getTime());
+			String m9 = HashUtils.XOR(nk_j, HashUtils.concatAndHashString(gwid, y_i_star, t3_time));
+			String m10 = HashUtils.XOR(z_i_2, HashUtils.concatAndHashString(y_i_star, z_i_1_star, t3_time));
+			String m11 = HashUtils.concatAndHashString(m9, m10, nk_i, nk_j, pu_i_2, authenMap.get("t1_time"),
+					authenMap.get("t2_time"), t3_time, y_i_star);
+			String m12 = HashUtils.XOR(nk_i, HashUtils.concatAndHashString(PU, v_j_star, String.valueOf(t3.getTime())));
+			String m13 = HashUtils.XOR(w_j_2_star, HashUtils.concatAndHashString(v_j_star, w_star, String.valueOf(t3.getTime())));
+			String m14 = HashUtils.concatAndHashString(m11, m12, nk_i, nk_j, pgw_j_2, authenMap.get("t1_time"),
+					authenMap.get("t2_time"), String.valueOf(t3.getTime()), v_j_star);
+
+			// update pu_1_i to pu_2_i - pgw_j_1 to pgw_j2
+
+			authenMap.put("pu_i_2", pu_i_2);
+			authenMap.put("pgw_j_2", pgw_j_2);
+			authenMap.put("t3_time", t3_time);
+			authenMap.put("M9", m9);
+			authenMap.put("M10", m10);
+			authenMap.put("M11", m11);
+			authenMap.put("M12", m12);
+			authenMap.put("M13", m13);
+			authenMap.put("M14", m14);
+
+			System.out.println("authenticateStep4(): Stage 4 - 5 - 6 - 7 - 8 success");
 		} else {
 			System.out.println("authenticateStep4(): Verify DELTA_TIME success");
 			return;
