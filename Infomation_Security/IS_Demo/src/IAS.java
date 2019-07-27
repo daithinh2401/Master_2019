@@ -192,7 +192,9 @@ public class IAS {
 
 			// update pu_1_i to pu_2_i - pgw_j_1 to pgw_j2
 
+			authenMap.put("pu_i_1", PU);
 			authenMap.put("pu_i_2", pu_i_2);
+			authenMap.put("pgw_j_1", pgw);
 			authenMap.put("pgw_j_2", pgw_j_2);
 			authenMap.put("t3_time", t3_time);
 			authenMap.put("M9", m9);
@@ -203,6 +205,9 @@ public class IAS {
 			authenMap.put("M14", m14);
 
 			System.out.println("authenticateStep4(): Stage 4 - 5 - 6 - 7 - 8 success");
+
+			GateWay gw = IAS.getInstance().getListGW().get(0);
+			gw.authenticateStep5(authenMap);
 		} else {
 			System.out.println("authenticateStep4(): Verify DELTA_TIME success");
 			return;

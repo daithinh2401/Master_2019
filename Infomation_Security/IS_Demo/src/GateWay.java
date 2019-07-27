@@ -41,7 +41,6 @@ public class GateWay {
 		String t1_time = authenMap.get("t1_time");
 		String PU_star = authenMap.get("PU_star");
 		
-		
 		Timestamp tc = new Timestamp(System.currentTimeMillis());
 		if(HashUtils.getAbs(tc.getTime(), Long.parseLong(t1_time)) < HashUtils.DELTA_TIME) {
 			System.out.println("authenticateStep3(): Verify DELTA_TIME success");
@@ -88,6 +87,8 @@ public class GateWay {
 			authenMap.put("M7", M7);
 			authenMap.put("M8", M8);
 			authenMap.put("t2_time", t2_time);
+			authenMap.put("k", String.valueOf(k));
+			authenMap.put("s", String.valueOf(s));
 			
 			System.out.println("authenticateStep3(): Done, send to IAS authenticate step 4");
 			
@@ -98,5 +99,42 @@ public class GateWay {
 			return;
 		}
 		
+	}
+
+	public void authenticateStep5(Map<String, String> authenMap) {
+		String t3_time = authenMap.get("t3_time");
+
+		Timestamp tc = new Timestamp(System.currentTimeMillis());
+		if(HashUtils.getAbs(tc.getTime(), Long.parseLong(t3_time)) < HashUtils.DELTA_TIME) {
+			System.out.println("authenticateStep5(): Verify DELTA_TIME success");
+
+			String gwid = message.get(0);
+			String v = message.get(2);
+			String w = message.get(3);
+			String k = authenMap.get("k");
+			String s = authenMap.get("s");
+			String pu = authenMap.get("pu_i_2");
+			String pgw = authenMap.get("pgw_j_2");
+
+			String nk_i_star = HashUtils.getStringFromXOR(authenMap.get("M12"),
+					HashUtils.concatAndHashString(pu, v, authenMap.get("t3_time")));
+			String nk_j = HashUtils.concatAndHashString(k , gwid);
+			String pgw_j_2 = HashUtils.concatAndHashString(pgw, s);
+			String w_j_2_star = HashUtils.getStringFromXOR(authenMap.get("M13"),
+					HashUtils.concatAndHashString(v, w));
+			String m14_star = HashUtils.concatAndHashString(authenMap.get("M11"), authenMap.get("M12"), nk_i_star, nk_j, pgw_j_2,
+					authenMap.get("t1_time"), authenMap.get("t2_time"), authenMap.get("t3_time"), v);
+
+			if (m14_star.equals(authenMap.get("M14"))){
+				System.out.println("Verify m14 and m14_star success: " + authenMap.get("M14"));
+			}else {
+				System.out.println("Verify m14 and m14_star success: " + authenMap.get("M14") + " " + m14_star);
+			}
+
+		} else {
+			System.out.println("authenticateStep5(): Verify DELTA_TIME failed");
+			return;
+		}
+
 	}
 }
